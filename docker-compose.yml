@@ -1,0 +1,29 @@
+version: '3'
+
+services:
+  database:
+    image: mariadb:latest
+    volumes:
+      - /opt/mariadb:/var/lib/mysql
+    environment:
+      - MYSQL_ROOT_PASSWORD=root
+      - MYSQL_DATABASE=bookmedik
+      - MYSQL_USER=arias
+      - MYSQL_PASSWORD=arias
+    container_name: mariadb
+
+  app:
+    build: ./php
+    ports:
+      - "80:80"
+    links:
+      - database
+    volumes:
+      - /opt/logs:/var/log/apache2
+    environment:
+      - MYSQL_DATABASE=bookmedik
+      - MYSQL_USER=arias
+      - MYSQL_PASSWORD=arias
+    depends_on:
+      - database
+    container_name: aplicacion
